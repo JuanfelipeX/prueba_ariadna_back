@@ -6,7 +6,7 @@ const Categoria = require('../models/categoria.js');
 
 // Obtener la lista completa de Categoria
 router.get('/', (req, res) => {
-  Producto.findAll()
+  Categoria.findAll()
     .then((categoria) => {
       res.json(categoria);
     })
