@@ -4,28 +4,15 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const app = express();
 const PORT = 3000;
+
+const categoriaRouter = require('./routes/categoria.js');
+const productoRouter = require('./routes/producto.js');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-
-const productoRouter = require('./routes/producto.js');
-const categoriaRouter = require('./routes/categoria.js');
-
-app.use('/producto', productoRouter);
 app.use('/categoria', categoriaRouter);
-
-
-// Configura la ruta para obtener la lista de productos
-productoRouter.get('/', (req, res) => {
-  // Lógica para obtener la lista de productos
-  res.send('Obtener la lista de productos');
-});
-
-// Configura la ruta para obtener la lista de Categorias
-categoriaRouter.get('/', (req, res) => {
-  // Lógica para obtener la lista de Categorias
-  res.send('Obtener la lista de Categorias');
-});
+app.use('/producto', productoRouter);
 
 const pool = new Pool({
   user: 'postgres',
@@ -35,7 +22,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Prueba de conexión a la base de datos
 pool.connect((err, client, release) => {
   if (err) {
     return console.error('Error al conectar a la base de datos:', err);
@@ -43,6 +29,20 @@ pool.connect((err, client, release) => {
   console.log('Conexión exitosa a la base de datos');
   release();
 });
+
+const Categoria = require('./models/categoria');
+const Producto = require('./models/producto');
+
+(async () => {
+  try {
+    await Categoria.sync();
+    console.log('Modelo de Categoria sincronizado correctamente');
+    await Producto.sync({ force: true });
+    console.log('Modelo de Producto sincronizado correctamente');
+  } catch (error) {
+    console.error('Error al sincronizar los modelos:', error);
+  }
+})();
 
 app.listen(PORT, () => {
   console.log(`Servidor Express escuchando en el puerto ${PORT}`);

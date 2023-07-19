@@ -17,9 +17,9 @@ router.get('/', (req, res) => {
 
 // Crear un nuevo producto
 router.post('/', (req, res) => {
-  const { nombre, categoria, precio, valor, stock } = req.body;
+  const { nombre, categoria_id, precio, valor, stock } = req.body;
 
-  Producto.create({ nombre, categoria, precio, valor, stock })
+  Producto.create({ nombre, categoria_id, precio, valor, stock })
     .then((producto) => {
       res.json(producto);
     })
@@ -49,13 +49,13 @@ router.get('/:id', (req, res) => {
 // Actualizar los detalles de un Producto específico
 router.put('/:id', (req, res) => {
   const productoId = req.params.id;
-  const { nombre, categoria, precio, valor, stock } = req.body;
+  const { nombre, categoria_id, precio, valor, stock } = req.body;
 
   Producto.findByPk(productoId)
     .then((producto) => {
       if (producto) {
         producto.nombre = nombre;
-        producto.categoria = categoria;
+        producto.categoria_id = categoria_id;
         producto.precio = precio;
         producto.valor = valor;
         producto.stock = stock;

@@ -4,14 +4,20 @@ const sequelize = new Sequelize('prueba_ariadna', 'postgres', '1234', {
   dialect: 'postgres',
 });
 
+const Categoria = require('./categoria'); // Importa el modelo de Categoria
+
 const Producto = sequelize.define('Producto', {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  categoria: {
-    type: DataTypes.STRING, 
+  categoria_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'Categoria', // Nombre del modelo de Categoria
+      key: 'id', // Nombre de la columna de clave primaria en la tabla de Categoria
+    },
   },
   precio: {
     type: DataTypes.DOUBLE,
@@ -24,12 +30,14 @@ const Producto = sequelize.define('Producto', {
   },
 });
 
+Producto.belongsTo(Categoria, { foreignKey: 'categoria_id' });
+
 Producto.sync()
   .then(() => {
     console.log('Producto sincronizado correctamente');
   })
   .catch((error) => {
-    console.error('Error al sincronizar el modelo de Producto :', error);
+    console.error('Error al sincronizar el modelo de Producto:', error);
   });
 
 module.exports = Producto;
