@@ -68,7 +68,7 @@ router.put('/:id', (req, res) => {
       res.json(updatedProducto);
     })
     .catch((error) => {
-      res.status(500).json({ error: 'Error al actualizar los detalles de Tramo' });
+      res.status(500).json({ error: 'Error al actualizar los detalles de Producto' });
     });
 });
 

@@ -9,13 +9,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 const productoRouter = require('./routes/producto.js');
+const categoriaRouter = require('./routes/categoria.js');
 
 app.use('/producto', productoRouter);
+app.use('/categoria', categoriaRouter);
+
 
 // Configura la ruta para obtener la lista de productos
 productoRouter.get('/', (req, res) => {
   // Lógica para obtener la lista de productos
   res.send('Obtener la lista de productos');
+});
+
+// Configura la ruta para obtener la lista de Categorias
+categoriaRouter.get('/', (req, res) => {
+  // Lógica para obtener la lista de Categorias
+  res.send('Obtener la lista de Categorias');
 });
 
 const pool = new Pool({
